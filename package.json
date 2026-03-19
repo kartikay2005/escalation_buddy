@@ -1,0 +1,13 @@
+{
+  "name": "escalation-system",
+  "version": "1.0.0",
+  "description": "A Python-based escalation management system that integrates with n8n webhooks, uses Ollama for AI-powered analysis, and provides Google Sheets persistence with a Streamlit dashboard for monitoring.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
