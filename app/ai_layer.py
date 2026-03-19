@@ -11,7 +11,7 @@ import json
 import uuid
 import os
 from typing import Dict, Any, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -198,7 +198,7 @@ def process_escalation(data: Dict[str, Any]) -> Dict[str, Any]:
         dict: Enriched event with AI triage data and escalation ID
     """
     escalation_id = str(uuid.uuid4())
-    timestamp = datetime.utcnow().isoformat()
+    timestamp = datetime.now(timezone.utc).isoformat()
     
     logger.info(f"Processing escalation {escalation_id} from {data.get('sender', 'unknown')}")
     

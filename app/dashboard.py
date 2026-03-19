@@ -1,6 +1,6 @@
 """Streamlit dashboard for VP-level escalation monitoring and triage."""
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, List
 
 import pandas as pd
@@ -134,7 +134,7 @@ def render_sidebar() -> bool:
                 "sender": sender.strip(),
                 "subject": subject.strip(),
                 "body": body.strip(),
-                "timestamp": datetime.utcnow().isoformat() + "Z",
+                "timestamp": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
             }
             try:
                 response = requests.post(WEBHOOK_URL, json=payload, timeout=15)

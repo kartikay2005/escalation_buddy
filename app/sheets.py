@@ -508,12 +508,19 @@ def update_status(row_id: str, status: str, owner: str = "") -> bool:
         owner: Name or email of person owning the ticket (optional)
 
     Returns:
-        bool: True if update was successful, False if row not found
+        bool: True if update was successful, False if row not found or invalid ID
 
     Raises:
         Exception: If sheet operation fails (not in demo mode)
     """
     global _worksheet, _demo_mode, _demo_data
+
+    # Validate row_id
+    if not row_id or not str(row_id).strip():
+        logger.warning("update_status called with empty or invalid row_id")
+        return False
+
+    row_id = str(row_id).strip()
 
     # Initialize if needed
     if _worksheet is None and not _demo_mode:
@@ -580,8 +587,8 @@ def get_open_p1() -> List[Dict[str, Any]]:
     if _demo_mode:
         open_p1s = [
             record for record in _demo_data
-            if record.get("Priority") == "P1"
-            and record.get("Status") not in ("Closed", "Resolved")
+            if str(record.get("Priority", "")).upper() == "P1"
+            and str(record.get("Status", "")).upper() not in ("CLOSED", "RESOLVED")
         ]
         logger.info(f"[DEMO] Found {len(open_p1s)} open P1 escalations")
         return open_p1s
@@ -590,11 +597,11 @@ def get_open_p1() -> List[Dict[str, Any]]:
         logger.info("Retrieving open P1 escalations")
         records = _worksheet.get_all_records()
 
-        # Filter for open P1s
+        # Filter for open P1s (case-insensitive)
         open_p1s = [
             record for record in records
-            if record.get("Priority") == "P1"
-            and record.get("Status") not in ("Closed", "Resolved")
+            if str(record.get("Priority", "")).upper() == "P1"
+            and str(record.get("Status", "")).upper() not in ("CLOSED", "RESOLVED")
         ]
 
         logger.info(f"Found {len(open_p1s)} open P1 escalations")
